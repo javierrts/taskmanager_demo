@@ -1,4 +1,5 @@
 import json
+from ai_service import AIService
 class Task:
 
     def __init__(self, id, description, completed=False):
@@ -27,6 +28,17 @@ class TaskManager:
         self.save_tasks()
         print (f"Task added: {task}")
         return task
+    
+    def add_complex_task(self, description):
+        ai_service = AIService()
+        subtasks = ai_service.create_simple_task_from_complex(description)
+        if  subtasks[0].startswith("Error"):
+            print(subtasks[0])
+        else:
+            for subtask in subtasks:
+                self.add_task(subtask)
+            print(f"Complex task added with {len(subtasks)} subtasks.")
+        
 
     def list_tasks(self):
         if not self._tasks:
@@ -69,4 +81,4 @@ class TaskManager:
 
     def save_tasks(self):
          with open(self.filename, "w") as f:
-             json.dump([{'id': task.id, 'description': task.description, 'completed': task.completed} for task in self._tasks], f)   
+             json.dump([{'id': task.id, 'description': task.description, 'completed': task.completed, } for task in self._tasks], f, indent=4)   
