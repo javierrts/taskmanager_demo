@@ -79,5 +79,5 @@ pytest test_task_manager.py -v
 - Task data is stored in `tasks.json` in the project root, created automatically the first time you add a task. This file is excluded from version control via `.gitignore`.
 - Task IDs are assigned incrementally starting at `1`, and continue from the highest existing ID after reloading from `tasks.json`.
 - Non-numeric menu input is handled gracefully with a validation message instead of crashing.
-- The AI subtask feature (`AIService.create_simple_task_from_complex`) calls the Gemini API via its OpenAI-compatible endpoint and requires network access and a valid `GEMINI_API_KEY`.
+- The AI subtask feature (`AIService.create_simple_task_from_complex`) calls the Gemini API and requires network access and a valid `GEMINI_API_KEY`.
 
