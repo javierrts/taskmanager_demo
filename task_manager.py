@@ -1,3 +1,4 @@
+import json
 class Task:
 
     def __init__(self, id, description, completed=False):
@@ -11,38 +12,61 @@ class Task:
 
 class TaskManager:
 
+    filename = "tasks.json"
+
     def __init__(self):
-        self.tasks = []
+        self._tasks = []
         self.next_id = 1
+        self.load_tasks()
+
 
     def add_task(self, description):
         task = Task(self.next_id, description)
-        self.tasks.append(task)
+        self._tasks.append(task)
         self.next_id += 1
+        self.save_tasks()
         print (f"Task added: {task}")
         return task
 
     def list_tasks(self):
-        if not self.tasks:
+        if not self._tasks:
             print("No tasks available.")
         else:
-            for task in self.tasks:
+            for task in self._tasks:
                 print(task)
 
     def complete_task(self, task_id):
-        for task in self.tasks:
+        for task in self._tasks:
             if task.id == task_id:
                 task.completed = True
+                self.save_tasks()
                 print(f"Task completed: {task}")
                 return task
         print(f"Task with ID {task_id} not found.")
 
     def eliminate_task(self, task_id):
-        for task in self.tasks:
+        for task in self._tasks:
             if task.id == task_id:
-                self.tasks.remove(task)
+                self._tasks.remove(task)
+                self.save_tasks()
                 print(f"Task eliminated: {task}")
                 return task
         print(f"Task with ID {task_id} not found.")
 
-        
+    def load_tasks(self):
+         try:
+             with open(self.filename, "r") as file  :
+                 data = json.load(file)
+                 self._tasks = [Task(item['id'], item['description'], item['completed']) for item in data]
+                 if self._tasks:
+                     self.next_id = max(task.id for task in self._tasks) + 1
+                 else:
+                     self.next_id = 1
+                        
+         except FileNotFoundError:
+             self._tasks = []
+             self.next_id = 1
+
+    def save_tasks(self):
+         with open(self.filename, "w") as f:
+             json.dump([{'id': task.id, 'description': task.description, 'completed': task.completed} for task in self._tasks], f)   

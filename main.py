@@ -17,24 +17,28 @@ def main():
     while True:
         print_menu()
 
-        choice = input("Choose an option: ")
-        match choice:
-            case "1":
-                description = input("Enter task description: ")
-                manager.add_task(description)
-            case "2":
-                manager.list_tasks()
-            case "3":
-                task_id = int(input("Enter task ID to complete: "))
-                manager.complete_task(task_id)
-            case "4":
-                task_id = int(input("Enter task ID to delete: "))
-                manager.eliminate_task(task_id)
-            case "5":
-                print("Exiting...")
-                break
-            case _:
-                print("Invalid option. Please try again.")
+        try:
+            choice = int(input("Choose an option: "))
+            match choice:
+                case 1:
+                    description = input("Enter task description: ")
+                    manager.add_task(description)
+                case 2:
+                    manager.list_tasks()
+                case 3:
+                    task_id = int(input("Enter task ID to complete: "))
+                    manager.complete_task(task_id)
+                case 4:
+                    task_id = int(input("Enter task ID to delete: "))
+                    manager.eliminate_task(task_id)
+                case 5:
+                    print("Exiting...")
+                    break
+                case _:
+                    print("Invalid option. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
 
 if __name__ == "__main__":
     main()
